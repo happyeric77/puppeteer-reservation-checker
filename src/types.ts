@@ -1,12 +1,9 @@
-export enum Availability {
-  Available = 'available',
-  Unavailable = 'unavailable',
-  Unknown = 'unknown',
-}
-
-export type WeeklyAvailability = {
-  week: string;
-  available: boolean;
+export type ReservationSlot = {
+  time: string;
+  content: string;
+  month: string;
+  date: string;
+  day: string;
 };
 
 export enum ReservationPeriod {
