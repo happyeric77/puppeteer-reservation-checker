@@ -114,7 +114,7 @@ export const removeOldScreenshots = (remainingFolders: number = 5) => {
   // Remove the old folders
   folders.forEach((folder) => {
     const folderPath = path.join(screenshotDir, folder);
-    fs.rmdirSync(folderPath, { recursive: true });
+    fs.rmSync(folderPath, { recursive: true, force: true });
     console.info(`Removed old folder: ${folderPath}`);
   });
 };
