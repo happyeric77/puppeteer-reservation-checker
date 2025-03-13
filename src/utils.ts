@@ -98,3 +98,23 @@ export const printLog = (msg: string, type: 'error' | 'info'): void => {
       break;
   }
 };
+
+export const removeOldScreenshots = (remainingFolders: number = 5) => {
+  // Only keep the most recent 5 folders
+  const screenshotDir = path.join(__dirname, '..', 'assets', 'screenshots');
+  const folders = fs
+    .readdirSync(screenshotDir)
+    .filter((file) => fs.statSync(path.join(screenshotDir, file)).isDirectory())
+    .sort((a, b) => {
+      const aTime = fs.statSync(path.join(screenshotDir, a)).mtime;
+      const bTime = fs.statSync(path.join(screenshotDir, b)).mtime;
+      return bTime.getTime() - aTime.getTime();
+    })
+    .slice(remainingFolders);
+  // Remove the old folders
+  folders.forEach((folder) => {
+    const folderPath = path.join(screenshotDir, folder);
+    fs.rmdirSync(folderPath, { recursive: true });
+    console.info(`Removed old folder: ${folderPath}`);
+  });
+};

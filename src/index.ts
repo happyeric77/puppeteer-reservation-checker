@@ -11,6 +11,7 @@ import {
   getScreenShot,
   getScreenshotDir,
   printLog,
+  removeOldScreenshots,
 } from './utils';
 
 const main = async (props: Props) => {
@@ -39,6 +40,7 @@ const main = async (props: Props) => {
 
   while (availability !== Availability.Unknown) {
     await getScreenShot(page, date, getScreenshotDir(now));
+    await removeOldScreenshots(60);
     availability = await getAvailability(page, date);
 
     weeklyAvailabilities.push({
@@ -57,6 +59,7 @@ const main = async (props: Props) => {
         'info',
       );
       // Wait for 30 minutes
+      console.info(`Waiting for 30 minutes...`);
       await new Promise((resolve) => setTimeout(resolve, 30 * 60 * 1000));
     } catch (e) {
       printLog(`Error sending notification: ${e}`, 'error');
@@ -105,21 +108,25 @@ const getAvailability = async (
     : Availability.Unknown;
 };
 
-const run = async (thread: () => Promise<void>) => {
+const run = async (thread: () => Promise<void>, repeatInMinutes: number) => {
   while (true) {
     try {
       await thread();
     } catch (e) {
       printLog(`Unknown Error: ${e}`, 'error');
     }
-    console.info('Waiting for 15 minutes...');
-    await new Promise((resolve) => setTimeout(resolve, 15 * 60 * 1000));
+    console.info(`Waiting for ${repeatInMinutes} minutes...`);
+    await new Promise((resolve) =>
+      setTimeout(resolve, repeatInMinutes * 60 * 1000),
+    );
   }
 };
 
-run(async () =>
-  main({
-    reservationPeriod: ReservationPeriod.LAUNCH,
-    url: 'https://booking.ebica.jp/webrsv/vacant/e014101001/28098?isfixshop=true',
-  }),
+run(
+  async () =>
+    main({
+      reservationPeriod: ReservationPeriod.LAUNCH,
+      url: 'https://booking.ebica.jp/webrsv/vacant/e014101001/28098?isfixshop=true',
+    }),
+  2,
 );
