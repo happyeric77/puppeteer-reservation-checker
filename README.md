@@ -1,37 +1,29 @@
 # Puppeteer Reservation Checker
 
-This project uses [Puppeteer](https://pptr.dev/) to check reservation availability on a given website and notify when slots are open.
+Uses [Puppeteer](https://pptr.dev/) to check reservation slots and notify when available.
 
-## Project Structure
+## Structure
 
-- [package.json](package.json): Defines scripts and dependencies.
-- [tsconfig.json](tsconfig.json): TypeScript configuration.
-- [src/index.ts](src/index.ts): Entry point that launches Puppeteer in the [`main`](src/index.ts) function.
-- [src/types.ts](src/types.ts): Contains enums like [`Availability`](src/types.ts) and [`ReservationPeriod`](src/types.ts).
-- [src/utils.ts](src/utils.ts): Includes helper functions like [`notify`](src/utils.ts) for sending notifications and [`getScreenShot`](src/utils.ts) for saving screenshots.
-- [.env](.env): Stores environment variables (e.g., `LINE_CHANNEL_SECRET`).
+- [package.json](package.json): Scripts and dependencies.
+- [tsconfig.json](tsconfig.json): TypeScript settings.
+- [src/index.ts](src/index.ts): Main entry, runs the reservation check.
+- [src/types.ts](src/types.ts): Types for reservation handling.
+- [src/utils/index.ts](src/utils/index.ts): Collection of helper utilities.
+- [.env](.env): Environment variable settings.
 
-## Getting Started
+## Setup
 
-1. Configure your environment variables by renaming `.env.example` to `.env` and filling in the required values.
-
-2. Install dependencies:
-
+1. Copy `.env.example` to `.env`and fill values.
+2. Install:
    ```sh
    npm install
    ```
-
-3. Build and run the project:
+3. Run:
    ```sh
    npm run start
    ```
 
 ## Usage
 
-The main process runs indefinitely and periodically checks reservations:
-
-- Edits to the [`Props`](src/types.ts) interface in [src/types.ts](src/types.ts) let you customize the reservation options.
-- Set the desired reservation period in [src/index.ts](src/index.ts).
-- Whenever a reservation becomes available, a notification is sent using the [`notify`](src/utils.ts) function, and a screenshot is stored in the assets folder.
-
-For any errors, logs and timestamps are appended to [assets/logs.txt](assets/logs.txt).
+The script periodically checks reservations in the [`main`](src/index.ts) function and sends notifications via [`notify`](src/utils/notification.ts). Logs are stored in assets.
+Logs are stored in the `dist/assets/logs.txt` file, and screenshots are saved in the `dist/assets/screenshots` folder.

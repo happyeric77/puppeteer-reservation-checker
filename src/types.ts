@@ -1,6 +1,6 @@
-export type ReservationSlot = {
+export type ReservationState = {
   time: string;
-  content: string;
+  state: string; // '○' | '×' | '-'
   month: string;
   date: string;
   day: string;
