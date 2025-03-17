@@ -72,7 +72,7 @@ const main = async (props: Props) => {
     const msg = `The ${cachedData
       .map((it) => `${it.month} ${it.date}th (${it.day}) ${it.time}`)
       .join(', ')} are no longer available`;
-    notify(msg);
+    await notify(msg);
     printLog(`Notification sent: ${msg}`, 'info', logFilePath);
   }
 
