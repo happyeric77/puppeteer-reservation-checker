@@ -11,7 +11,14 @@ Uses [Puppeteer](https://pptr.dev/) to check reservation slots and notify when a
 - [src/utils/index.ts](src/utils/index.ts): Collection of helper utilities.
 - [.env](.env): Environment variable settings.
 
-## Setup
+## Usage
+
+The script periodically checks reservations in the [`main`](src/index.ts) function and sends notifications via [`notify`](src/utils/notification.ts). Logs are stored in assets.
+Logs are stored in the `dist/assets/logs.txt` file, and screenshots are saved in the `dist/assets/screenshots` folder.
+
+## Getting Started
+
+### MacOS environment
 
 1. Copy `.env.example` to `.env`and fill values.
 2. Install:
@@ -23,7 +30,19 @@ Uses [Puppeteer](https://pptr.dev/) to check reservation slots and notify when a
    npm run start
    ```
 
-## Usage
+### Deploy using Docker: ONLY FOR LINUX ARM64V8 (AARCH64) ARCHITECTURE
 
-The script periodically checks reservations in the [`main`](src/index.ts) function and sends notifications via [`notify`](src/utils/notification.ts). Logs are stored in assets.
-Logs are stored in the `dist/assets/logs.txt` file, and screenshots are saved in the `dist/assets/screenshots` folder.
+1. replace the `const browser = await puppeteer.launch();` in `src/index.ts` with the following code:
+
+```ts
+const browser = await puppeteer.launch({
+  executablePath: '/usr/bin/chromium',
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+});
+```
+
+2. Copy `.env.example` to `.env`and fill values.
+
+3. Run `sudo docker-compose up -d` to start the container.
+
+> You can check logs and screenshots by running `sudo docker cp <container-id>:/usr/app/assets ./assets`
